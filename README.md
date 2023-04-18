@@ -80,22 +80,27 @@ python exp_runner.py --mode validate_mesh_udf --conf ./confs/wmask_open.conf --c
 
 ### Datasets and results
 
-You can download our datasets and results [here]().
+You can download the full datasets and results [here]() and put them in ./public_data and ./exp, respectively.
 
 The data is organized as follows:
 
 ```
 public_data
 |-- <case_name>
-    |-- cameras_xxx.npz    # camera parameters
+    |-- cameras_xxx.npz
     |-- image
-        |-- 000.png        # target image for each view
+        |-- 000.png
         |-- 001.png
         ...
     |-- mask
-        |-- 000.png        # target mask each view (For unmasked setting, set all pixels as 255)
+        |-- 000.png
         |-- 001.png
         ...
+exp
+|-- <case_name>
+    |-- <conf name>
+        |-- checkpoints
+            |-- ckpt_400000.pth
 ```
 
 ### Train NeUDF with custom data
