@@ -98,7 +98,7 @@ public_data
         ...
 exp
 |-- <case_name>
-    |-- <conf name>
+    |-- <conf_name>
         |-- checkpoints
             |-- ckpt_400000.pth
 ```
