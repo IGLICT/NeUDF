@@ -1,4 +1,4 @@
-# NeuS
+# NeUDF
 We present an open surface reconstruction method using UDF, called NeUDF, for reconstructing objects with high-fidelity open surfaces from 2D image inputs.
 
 ![](./static/teaser.jpg)
