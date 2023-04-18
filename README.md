@@ -82,6 +82,22 @@ python exp_runner.py --mode validate_mesh_udf --conf ./confs/wmask_open.conf --c
 
 You can download our datasets and results [here]().
 
+The data is organized as follows:
+
+```
+public_data
+|-- <case_name>
+    |-- cameras_xxx.npz    # camera parameters
+    |-- image
+        |-- 000.png        # target image for each view
+        |-- 001.png
+        ...
+    |-- mask
+        |-- 000.png        # target mask each view (For unmasked setting, set all pixels as 255)
+        |-- 001.png
+        ...
+```
+
 ### Train NeUDF with custom data
 
 Please refer to the  [Data Conversion](https://github.com/Totoro97/NeuS/tree/main/preprocess_custom_data) in NeuS.
