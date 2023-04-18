@@ -22,7 +22,7 @@ python setup.py build_ext --inplace
 cd ..
 ```
 
-To use [PyMeshLab]() and a customized Screened poisson to extract open mesh from the learned UDF field, please run:
+To use [PyMeshLab](https://github.com/cnr-isti-vclab/PyMeshLab) and a customized Screened poisson to extract open mesh from the learned UDF field, please run:
 ```shell
 pip install pymeshlab
 ```
