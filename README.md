@@ -123,4 +123,4 @@ Cite as below if you find this repository is helpful to your project:
 
 ## Acknowledgement
 
-Some code snippets are borrowed from [NeuS](https://github.com/Totoro97/NeuS) and [MeshUDF](https://github.com/cvlab-epfl/MeshUDF). Thanks for these great projects.
+Some code snippets are borrowed from [NeuS](https://github.com/Totoro97/NeuS), [NDF](https://github.com/jchibane/ndf) and [MeshUDF](https://github.com/cvlab-epfl/MeshUDF). Thanks for these great projects.
