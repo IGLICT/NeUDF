@@ -80,7 +80,7 @@ python exp_runner.py --mode validate_mesh_udf --conf ./confs/wmask_open.conf --c
 
 ### Datasets and results
 
-You can download the full datasets and results [here]() and put them in ./public_data and ./exp, respectively.
+You can download the full datasets and results [here]() and put them in ./public_data/ and ./exp/, respectively.
 
 The data is organized as follows:
 
