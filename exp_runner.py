@@ -115,7 +115,6 @@ class Runner:
             model_list_raw = os.listdir(os.path.join(self.base_exp_dir, 'checkpoints'))
             model_list = []
             for model_name in model_list_raw:
-                # if model_name[-3:] == 'pth' and int(model_name[5:-4]) <= self.end_iter:
                 if model_name[-3:] == 'pth' and int(model_name[5:-4]):
                     model_list.append(model_name)
             model_list.sort()
@@ -336,7 +335,6 @@ class Runner:
             if feasible('color_fine'):
                 out_rgb_fine.append(render_out['color_fine'].detach().cpu().numpy())
             if feasible('gradients') and feasible('weights'):
-                # print(render_out['gradients'].shape, render_out['weights'].shape)
                 n_samples = self.renderer.n_samples + self.renderer.n_importance
                 normals = render_out['gradients'] * render_out['weights'][:, :n_samples, None]
                 if feasible('inside_sphere'):
@@ -420,9 +418,6 @@ class Runner:
         point_cloud, duration = self.renderer.generate_point_cloud(num_steps=num_steps, device=self.device, num_points=1000000, filter_val=0.001)
 
         print('num_steps', num_steps, 'duration', duration)
-        # color = self.get_vertices_color(vertices=torch.from_numpy(point_cloud.astype(np.float32)).to(self.device))
-        # mesh = trimesh.Trimesh(vertices=point_cloud, faces=[])
-        # mesh.visual.vertex_colors = color
 
         if color:
             color_cpu = []
@@ -431,7 +426,6 @@ class Runner:
                 min_idx = len(color_cpu)
                 max_idx = np.min([len(point_cloud), min_idx+patch_size])
                 color = self.get_vertices_color(vertices=torch.from_numpy(point_cloud[min_idx:max_idx, :].astype(np.float32)).to(self.device))
-                # print(min_idx, max_idx, color.shape)
                 if len(color_cpu)==0:
                     color_cpu = color
                 else:
@@ -441,12 +435,6 @@ class Runner:
 
         if world_space:
             point_cloud = point_cloud * self.dataset.scale_mats_np[0][0, 0] + self.dataset.scale_mats_np[0][:3, 3][None]
-
-        # mesh = trimesh.Trimesh(vertices=point_cloud, faces=[])
-        #
-        # mesh.visual.vertex_colors = color_cpu
-        #
-        # mesh.export(os.path.join(self.base_exp_dir, 'meshes', '{:0>8d}.off'.format(self.iter_step)))
 
         cloud = trimesh.points.PointCloud(vertices=point_cloud, colors=color_cpu[:, ::-1])
         cloud.export(os.path.join(self.base_exp_dir, 'meshes', 'pc{:0>8d}.ply'.format(self.iter_step)))
@@ -480,8 +468,6 @@ class Runner:
         bound_min = torch.tensor(self.dataset.object_bbox_min, dtype=torch.float32)
         bound_max = torch.tensor(self.dataset.object_bbox_max, dtype=torch.float32)
 
-        # vertices, triangles =\
-        #     self.renderer.extract_geometry(bound_min, bound_max, resolution=resolution, threshold=threshold)
         os.makedirs(os.path.join(self.base_exp_dir, 'meshes'), exist_ok=True)
         vertices, triangles, vertices_color = validate_mesh_udf.main(bound_min, bound_max, self.sdf_network, self.color_network,  resolution, color)
 
@@ -514,9 +500,6 @@ class Runner:
                                           far,
                                           cos_anneal_ratio=self.get_cos_anneal_ratio(),
                                           background_rgb=background_rgb)
-        # print(z_vals.shape, z_vals)
-        # print(sdf.shape, sdf)
-        # print(weights.shape, weights)
         weights = weights/(z_vals[1:]-z_vals[:-1])
 
         os.makedirs(os.path.join(self.base_exp_dir, 'validations_ray'), exist_ok=True)
@@ -557,9 +540,6 @@ class Runner:
         point_cloud = (np.random.rand(len(point_cloud), 3) * 2 - 1) * disturb + point_cloud
 
         print('num_steps', num_steps, 'duration', duration)
-        # color = self.get_vertices_color(vertices=torch.from_numpy(point_cloud.astype(np.float32)).to(self.device))
-        # mesh = trimesh.Trimesh(vertices=point_cloud, faces=[])
-        # mesh.visual.vertex_colors = color
 
         normal_cpu = []
         while len(normal_cpu) < len(point_cloud):
@@ -567,7 +547,6 @@ class Runner:
             min_idx = len(normal_cpu)
             max_idx = np.min([len(point_cloud), min_idx+patch_size])
             normal = self.get_vertices_normal(vertices=torch.from_numpy(point_cloud[min_idx:max_idx, :].astype(np.float32)).to(self.device))
-            # print(min_idx, max_idx, color.shape)
             if len(normal_cpu)==0:
                 normal_cpu = normal
             else:
@@ -576,15 +555,6 @@ class Runner:
         if world_space:
             point_cloud = point_cloud * self.dataset.scale_mats_np[0][0, 0] + self.dataset.scale_mats_np[0][:3, 3][None]
 
-        # mesh = trimesh.Trimesh(vertices=point_cloud, faces=[])
-        #
-        # mesh.visual.vertex_colors = color_cpu
-        #
-        # mesh.export(os.path.join(self.base_exp_dir, 'meshes', '{:0>8d}.off'.format(self.iter_step)))
-
-        # normal_cpu = normal_cpu/np.linalg.norm(normal_cpu, axis=-1, keepdims=True)
-        # normal_cpu = np.abs(normal_cpu)*255
-        # normal_cpu = normal_cpu + (255 - normal_cpu[[1, 2, 0], :])
         normal_cpu_p = normal_cpu.clip(0, 1)
         normal_cpu_n = -normal_cpu.clip(-1, 0)
         normal_cpu = (normal_cpu_p + normal_cpu_n[:, [1, 2, 0]])*255
@@ -597,9 +567,6 @@ class Runner:
         point_cloud = (np.random.rand(len(point_cloud), 3) * 2 - 1) * disturb + point_cloud
 
         print('num_steps', num_steps, 'duration', duration)
-        # color = self.get_vertices_color(vertices=torch.from_numpy(point_cloud.astype(np.float32)).to(self.device))
-        # mesh = trimesh.Trimesh(vertices=point_cloud, faces=[])
-        # mesh.visual.vertex_colors = color
 
         sdf_cpu = []
         while len(sdf_cpu) < len(point_cloud):
@@ -607,7 +574,6 @@ class Runner:
             min_idx = len(sdf_cpu)
             max_idx = np.min([len(point_cloud), min_idx+patch_size])
             sdf = self.get_vertices_sdf(vertices=torch.from_numpy(point_cloud[min_idx:max_idx, :].astype(np.float32)).to(self.device))
-            # print(min_idx, max_idx, color.shape)
             if len(sdf_cpu)==0:
                 sdf_cpu = sdf
             else:
@@ -616,19 +582,6 @@ class Runner:
         if world_space:
             point_cloud = point_cloud * self.dataset.scale_mats_np[0][0, 0] + self.dataset.scale_mats_np[0][:3, 3][None]
 
-        # mesh = trimesh.Trimesh(vertices=point_cloud, faces=[])
-        #
-        # mesh.visual.vertex_colors = color_cpu
-        #
-        # mesh.export(os.path.join(self.base_exp_dir, 'meshes', '{:0>8d}.off'.format(self.iter_step)))
-
-        # normal_cpu = normal_cpu/np.linalg.norm(normal_cpu, axis=-1, keepdims=True)
-        # normal_cpu = np.abs(normal_cpu)*255
-        # normal_cpu = normal_cpu + (255 - normal_cpu[[1, 2, 0], :])
-        # normal_cpu_p = normal_cpu.clip(0, 1)
-        # normal_cpu_n = -normal_cpu.clip(-1, 0)
-        # normal_cpu = (normal_cpu_p + normal_cpu_n[:, [1, 2, 0]])*255
-        # normal_cpu = np.clip(normal_cpu, 0, 255)
         sdf_cpu = np.column_stack((np.zeros_like(sdf_cpu), (sdf_cpu*100).clip(0, 1)*255, (sdf_cpu*100).clip(0, 1)*255))
         cloud = trimesh.points.PointCloud(vertices=point_cloud, colors=sdf_cpu)
         cloud.export(os.path.join(self.base_exp_dir, 'meshes', 'pu{:0>8d}.ply'.format(self.iter_step)))
@@ -683,9 +636,6 @@ class Runner:
                 xyz = ws.fourier_transform(sample_subset)
             else:
                 xyz = sample_subset
-            # batch_vecs = latent_vec.view(latent_vec.shape[0], 1, latent_vec.shape[1]).repeat(1, sample_subset.shape[0],
-            #                                                                                  1)
-            # input = torch.cat([batch_vecs.reshape(-1, latent_vec.shape[1]), xyz.reshape(-1, xyz.shape[-1])], dim=1)
             # Run forward pass
             with torch.no_grad():
                 df = self.sdf_network.sdf(xyz)
@@ -714,9 +664,6 @@ class Runner:
                 xyz = ws.fourier_transform(sample_subset)
             else:
                 xyz = sample_subset
-            # batch_vecs = latent_vec.view(latent_vec.shape[0], 1, latent_vec.shape[1]).repeat(1, sample_subset.shape[0],
-            #                                                                                  1)
-            # input = torch.cat([batch_vecs.reshape(-1, latent_vec.shape[1]), xyz.reshape(-1, xyz.shape[-1])], dim=1)
             # Run forward pass
             df = self.sdf_network.sdf(xyz)
             # Compute and store normalized vectors pointing towards the surface
@@ -775,7 +722,6 @@ class Runner:
                 xyz = ws.fourier_transform(verts_torch)
             else:
                 xyz = verts_torch
-            # pred_df_verts = decoder(torch.cat([latent_vec.repeat(verts_torch.shape[0], 1), xyz], dim=1))
             pred_df_verts = self.sdf_network.sdf(xyz)
         pred_df_verts = pred_df_verts.cpu().numpy()
         # Remove faces that have vertices far from the surface
@@ -928,8 +874,6 @@ class Runner:
         bound_min = torch.tensor(self.dataset.object_bbox_min, dtype=torch.float32)
         bound_max = torch.tensor(self.dataset.object_bbox_max, dtype=torch.float32)
 
-        # vertices, triangles =\
-        #     self.renderer.extract_geometry(bound_min, bound_max, resolution=resolution, threshold=threshold)
         os.makedirs(os.path.join(self.base_exp_dir, 'meshes'), exist_ok=True)
         vertices, triangles, vertices_color = self.validate_mesh_udf_main(bound_min, bound_max, resolution, color)
 
@@ -946,7 +890,6 @@ class Runner:
     def validate_mesh_udf_main(self, b_min, b_max, n, color):
         b_min_np = b_min.detach().cpu().numpy().min()
         b_max_np = b_max.detach().cpu().numpy().max()
-        # print(f'bounding box range: {b_min_np} - {b_max_np}')
         vertices, triangles, _ = self.get_mesh_udf_fast(b_min=b_min_np, b_max=b_max_np,
                                                         N_MC=n, gradient=False,
                                                         smooth_borders=False, fourier=False)
