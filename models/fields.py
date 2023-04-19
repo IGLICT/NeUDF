@@ -89,22 +89,9 @@ class SDFNetwork(nn.Module):
             if l < self.num_layers - 2:
                 x = self.activation(x)
 
-        # neus_udf: output udf
         x = self.activation(x)
 
         return torch.cat([x[:, :1] / self.scale, x[:, 1:]], dim=-1)
-
-        # if self.mode == 'act':
-        #     x = self.activation(x)
-        #     return torch.cat([x[:, :1] / self.scale, x[:, 1:]], dim=-1)
-        # elif self.mode == 'minus_act':
-        #     # x = -x
-        #     x = self.activation(x)
-        #     # print(x)
-        #     return torch.cat([x[:, :1] / self.scale, x[:, 1:]], dim=-1)
-        # elif self.mode == 'abs':
-        #     x = torch.abs(x)
-        #     return torch.cat([x[:, :1] / self.scale, x[:, 1:]], dim=-1)
 
     def sdf(self, x):
         return self.forward(x)[:, :1]
