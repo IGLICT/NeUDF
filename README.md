@@ -114,7 +114,7 @@ Cite as below if you find this repository is helpful to your project:
 
 ```
 @inproceedings{Liu23NeUDF,
-    author = Liu, Yu-Tao and Wang, Li and Yang, Jie and Chen, Weikai and Meng, Xiaoxu and Yang, Bo and Gao, Lin},
+    author = {Liu, Yu-Tao and Wang, Li and Yang, Jie and Chen, Weikai and Meng, Xiaoxu and Yang, Bo and Gao, Lin},
     title = {NeUDF: Leaning Neural Unsigned Distance Fields with Volume Rendering},
     booktitle={Computer Vision and Pattern Recognition (CVPR)},
     year = {2023},
