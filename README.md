@@ -64,7 +64,7 @@ The corresponding mesh can be found in `exp/<case_name>/<exp_name>/meshes/spsr<i
 python exp_runner.py --mode validate_mesh --conf <config_file> --case <case_name> --is_continue
 ```
 
-The corresponding mesh can be found in `exp/<case_name>/<exp_name>/meshes/sp_ml<iter_steps>.ply`.
+The corresponding mesh can be found in `exp/<case_name>/<exp_name>/meshes/<iter_steps>.ply`.
 
 ### Evaluation using pretrained models
 
